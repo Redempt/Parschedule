@@ -5,9 +5,15 @@ package parschedule;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class AppTest {
     @Test
-    public void emptyTest() {
-
+    public void simpleTimeOffsetTest() {
+        assertEquals(TimeOffsetParser.parseTimeOffset("10s"), Duration.ofSeconds(10));
+        assertEquals(TimeOffsetParser.parseTimeOffset("5m10s"), Duration.ofSeconds(310));
+        assertEquals(TimeOffsetParser.parseTimeOffset("1d"), Duration.ofDays(1));
     }
 }
