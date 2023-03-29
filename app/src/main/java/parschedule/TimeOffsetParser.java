@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class TimeOffsetParser {
 
-    public static Duration parseTimeOffset(String input) {
+    public static Duration parseTimeOffset(String input, String timeString) {
         Pattern pattern = Pattern.compile("(\\d+)([smhd])");
         Matcher matcher = pattern.matcher(input);
         LocalTime time = LocalTime.parse(timeString.toUpperCase(), DateTimeFormatter.ofPattern("h:mma"));
