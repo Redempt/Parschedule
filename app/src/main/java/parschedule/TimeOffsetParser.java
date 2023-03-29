@@ -1,5 +1,3 @@
-package parschedule;
-
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -10,11 +8,9 @@ import java.util.regex.Pattern;
 
 public class TimeOffsetParser {
 
-    public static Duration parseTimeOffset(String input, String timeString) {
+    public static Duration parseTimeOffset(String input) {
         Pattern pattern = Pattern.compile("(\\d+)([smhd])");
         Matcher matcher = pattern.matcher(input);
-        LocalTime time = LocalTime.parse(timeString.toUpperCase(), DateTimeFormatter.ofPattern("h:mma"));
-        return Duration.between(LocalTime.NOON, time);
 
         long seconds = 0;
         while (matcher.find()) {
@@ -41,9 +37,21 @@ public class TimeOffsetParser {
 
         return Duration.ofSeconds(seconds);
     }
-    
-    public static Duration diff(Calendar cal1, Calendar cal2) {
-        return Duration.between(cal1.toInstant(), cal2.toInstant());
-   
-}
 
+    public static Duration diff(Calendar from, Calendar to) {
+        LocalTime fromTime = LocalTime.of(from.get(Calendar.HOUR_OF_DAY), from.get(Calendar.MINUTE));
+        LocalTime toTime = LocalTime.of(to.get(Calendar.HOUR_OF_DAY), to.get(Calendar.MINUTE));
+        return Duration.between(fromTime, toTime);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(parseTimeOffset("10s"));
+        System.out.println(parseTimeOffset("5m10s"));
+        System.out.println(parseTimeOffset("1d"));
+
+        Calendar now = Calendar.getInstance();
+        Calendar threePM = Calendar.getInstance();
+        threePM.set(Calendar.HOUR_OF_DAY, 15);
+        System.out.println(diff(now, threePM));
+    }
+}
