@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AppTest {
     public static Duration diff(Calendar first, Calendar second) {
@@ -27,6 +28,8 @@ public class AppTest {
     public void simpleTimeSetTest() {
         Calendar threePM = Calendar.getInstance();
         threePM.set(Calendar.HOUR_OF_DAY, 15);
-        assertEquals(TimeOffsetParser.parseTimeOffset("3:00pm"), diff(Calendar.getInstance(), threePM));
+        threePM.set(Calendar.MINUTE, 0);
+        threePM.set(Calendar.SECOND, 0);
+        assertEquals(TimeOffsetParser.parseTimeOffset("3:00pm").toSeconds(), diff(Calendar.getInstance(), threePM).toSeconds());
     }
 }
