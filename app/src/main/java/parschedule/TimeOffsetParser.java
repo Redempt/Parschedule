@@ -1,3 +1,4 @@
+package parschedule;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -7,12 +8,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TimeOffsetParser {
+    private static final Pattern OFFSET_PATTERN = Pattern.compile("(\\d+)([smhd])");
+    private static final Pattern TIME_PATTERN = Pattern.compile("(\\d{1,2}):(\\d\\d) ?([aApP][mM])");
 
     public static Duration parseTimeOffset(String input) {
-        Pattern pattern = Pattern.compile("(\\d+)([smhd])");
-        Matcher matcher = pattern.matcher(input);
-
+        Matcher matcher = OFFSET_PATTERN.matcher(input);
         long seconds = 0;
+        
         while (matcher.find()) {
             String value = matcher.group(1);
             String unit = matcher.group(2);
@@ -35,23 +37,45 @@ public class TimeOffsetParser {
             }
         }
 
-        return Duration.ofSeconds(seconds);
+        Calendar timeOfDay = timeOfDayParser(input, seconds);
+        return diff(timeOfDay, Calendar.getInstance());
+    }
+    public static Duration diff(Calendar cal1, Calendar cal2) {
+        return Duration.between(cal1.toInstant(), cal2.toInstant());
+    }
+    public static Calendar timeOfDayParser(String input, long offSet){
+        Calendar calender = Calendar.getInstance();
+        calender.add(Calendar.SECOND, (int) offSet);
+        Matcher matcher = TIME_PATTERN.matcher(input);
+
+        while (matcher.find()) {
+            int hour = Integer.parseInt(matcher.group(1));
+            int minute = Integer.parseInt(matcher.group(2));
+            String unit = matcher.group(3);
+            
+
+            switch(unit.toLowerCase()){
+                case "am":
+                    if(hour == 12){
+                        hour = 0;
+                    }
+                    break;
+                case "pm":
+                    if (hour != 12){
+                        hour += 12;
+                    }
+                    break;
+                default:
+                throw new IllegalArgumentException("Invalid time of day: " + unit);
+
+            }
+            calender.set(Calendar.HOUR, hour);
+            calender.set(Calendar.MINUTE, minute);
+            calender.set(Calendar.SECOND, 0);
+        }
+        return calender;
     }
 
-    public static Duration diff(Calendar from, Calendar to) {
-        LocalTime fromTime = LocalTime.of(from.get(Calendar.HOUR_OF_DAY), from.get(Calendar.MINUTE));
-        LocalTime toTime = LocalTime.of(to.get(Calendar.HOUR_OF_DAY), to.get(Calendar.MINUTE));
-        return Duration.between(fromTime, toTime);
-    }
 
-    public static void main(String[] args) {
-        System.out.println(parseTimeOffset("10s"));
-        System.out.println(parseTimeOffset("5m10s"));
-        System.out.println(parseTimeOffset("1d"));
-
-        Calendar now = Calendar.getInstance();
-        Calendar threePM = Calendar.getInstance();
-        threePM.set(Calendar.HOUR_OF_DAY, 15);
-        System.out.println(diff(now, threePM));
-    }
 }
+
