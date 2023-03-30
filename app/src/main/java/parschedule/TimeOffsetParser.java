@@ -38,7 +38,7 @@ public class TimeOffsetParser {
         }
 
         Calendar timeOfDay = timeOfDayParser(input, seconds);
-        return diff(timeOfDay, Calendar.getInstance());
+        return diff(Calendar.getInstance(), timeOfDay);
     }
     public static Duration diff(Calendar cal1, Calendar cal2) {
         return Duration.between(cal1.toInstant(), cal2.toInstant());
@@ -52,7 +52,6 @@ public class TimeOffsetParser {
             int hour = Integer.parseInt(matcher.group(1));
             int minute = Integer.parseInt(matcher.group(2));
             String unit = matcher.group(3);
-            
 
             switch(unit.toLowerCase()){
                 case "am":
@@ -61,7 +60,7 @@ public class TimeOffsetParser {
                     }
                     break;
                 case "pm":
-                    if (hour != 12){
+                    if (hour != 12) {
                         hour += 12;
                     }
                     break;
@@ -69,9 +68,11 @@ public class TimeOffsetParser {
                 throw new IllegalArgumentException("Invalid time of day: " + unit);
 
             }
-            calender.set(Calendar.HOUR, hour);
+            calender.set(Calendar.HOUR_OF_DAY, hour);
             calender.set(Calendar.MINUTE, minute);
             calender.set(Calendar.SECOND, 0);
+            System.out.println(hour);
+            System.out.println(calender.getTime());
         }
         return calender;
     }
