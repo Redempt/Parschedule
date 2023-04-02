@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.Calendar;
 import java.util.Date;
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,6 +31,28 @@ public class AppTest {
         threePM.set(Calendar.HOUR_OF_DAY, 15);
         threePM.set(Calendar.MINUTE, 0);
         threePM.set(Calendar.SECOND, 0);
-        assertEquals(TimeOffsetParser.parseTimeOffset("3:00pm").toSeconds(), diff(Calendar.getInstance(), threePM).toSeconds());
+        assertEquals(TimeOffsetParser.parseTimeOffset("3:00pm").getSeconds(), diff(Calendar.getInstance(), threePM).getSeconds());
+    }
+
+    @Test
+    public void scheduleTask() {
+        List<Task> tasks = new ArrayList<>();
+        if (tasks[0] == "Task 1", "Do Something"){
+            assertTrue("A task is scheduled.");
+        }else{
+            assertFalse("No task is scheduled.")
+        }
+    }
+    @Test
+    public void persistentSchedulerTest(){
+        String filePath = "Task.txt";
+        File file = new File(filePath);
+        if(file.exists()){
+            assertTrue("The file exists: " + filePath);
+            file.delete();
+        } else{
+            assertFalse("File does not exist.");
+        }
     }
 }
+
