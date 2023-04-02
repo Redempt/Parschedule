@@ -2,12 +2,12 @@ import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduleExecutorService;
 import java.util.concurrent.TimeUnit;
-public class Wrapper {
+public class PersistentScheduler {
     private String taskName;
     private int interval;
     private String filePath;
 
-    public Wrapper(String taskName, int interval, String filePath) {
+    public PersistentScheduler(String taskName, int interval, String filePath) {
         this.taskName = taskName;
         this.interval = interval;
         this.filePath = filePath;
@@ -30,7 +30,7 @@ public class Wrapper {
         }
     }
 
-    public static Wrapper loadFromFile(String filePath) {
+    public static PersistentScheduler loadFromFile(String filePath) {
         try {
             File file = new File(filePath);
             BufferedReader reader = new BufferedReader(new FileReader(file));
