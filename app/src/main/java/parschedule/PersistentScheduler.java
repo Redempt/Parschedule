@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersistentScheduler {
-    private List<Task> tasks = new ArrayList<>();
+    private ArrayList<String> tasks = new ArrayList<String>();
     private String filePath;
 
 
