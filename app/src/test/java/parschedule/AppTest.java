@@ -35,24 +35,25 @@ public class AppTest {
     }
 
     @Test
-    public void scheduleTask() {
+    public void scheduleTaskTest(){
         List<Task> tasks = new ArrayList<>();
-        if (tasks[0] == "Task 1", "Do Something"){
-            assertTrue("A task is scheduled.");
-        }else{
-            assertFalse("No task is scheduled.")
+        if(!tasks.isEmpty()){
+            assertEquals("A task is scheduled.", tasks);
+        } else{
+            System.out.println("No task is Scheduled");
         }
     }
     @Test
     public void persistentSchedulerTest(){
-        String filePath = "Task.txt";
+        String filePath = "Tasks.txt";
         File file = new File(filePath);
         if(file.exists()){
-            assertTrue("The file exists: " + filePath);
-            file.delete();
+            assertEquals("The file exists.", filePath);
+
         } else{
-            assertFalse("File does not exist.");
+            System.out.println("File does not exist");
         }
+        file.delete();
     }
 }
 
