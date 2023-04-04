@@ -40,17 +40,17 @@ public class AppTest {
         PersistentScheduler scheduler = new PersistentScheduler();
         AtomicInteger counter = new AtomicInteger(0);
 
-        Runnable firstTask = () ->{
+        Runnable firstTask = () -> {
             System.out.println("Task1: Do something.");
             counter.incrementAndGet();
         };
 
-        Runnable secondTask = () ->{
+        Runnable secondTask = () -> {
             System.out.println("Task2: Do something else.");
             counter.incrementAndGet();
         };
         scheduler.scheduleTask(firstTask, 2);
-        scheduler.scheduleTask(secondTask,2);
+        scheduler.scheduleTask(secondTask, 2);
 
         Thread.sleep(3000); //Wait for tasks to finish
 
