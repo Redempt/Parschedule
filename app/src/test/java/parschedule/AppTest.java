@@ -61,13 +61,19 @@ public class AppTest {
 
 
     }
-    @Test
+@Test
     public void persistentSchedulerTest(){
-        String filePath = "";
-        File file = new File(filePath);
-        assertEquals("Tasks.txt", file, "The file exists.");
+       PersistentScheduler scheduler = new PersistentScheduler();
+       String fileName = "";
+       Runnable task = () -> {
+            System.out.println("Test to be deleted from scheduler.");
+       };
+       scheduler.scheduleTask(task, 2);
+       
+       File file = new File(fileName);
+       scheduler.saveToFile(fileName);
+       assertEquals("Task.txt", file, "The file exists.");
 
-        file.delete();
     }
 }
 
