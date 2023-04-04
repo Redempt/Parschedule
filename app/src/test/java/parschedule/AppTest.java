@@ -9,11 +9,11 @@ import java.time.Duration;
 import java.util.Calendar;
 import java.util.Date;
 import java.io.File;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AppTest {
+    private int taskCount;
     public static Duration diff(Calendar first, Calendar second) {
         return Duration.ofMillis(second.getTimeInMillis() - first.getTimeInMillis());
     }
@@ -36,23 +36,31 @@ public class AppTest {
 
     @Test
     public void scheduleTaskTest(){
-        List<Task> tasks = new ArrayList<>();
-        if(!tasks.isEmpty()){
-            assertEquals("A task is scheduled.", tasks);
-        } else{
-            System.out.println("No task is Scheduled");
-        }
+        PersistentScheduler scheduler = new PersistentScheduler();
+
+        Runnable firstTask = () ->{
+            System.out.println("Task1: Do something.");
+            taskCount++;
+        };
+
+        Runnable secondTask = () ->{
+            System.out.println("Task2: Do something else.");
+            taskCount++;
+        };
+        scheduler.scheduleTask(firstTask, 2);
+        scheduler.scheduleTask(secondTask,2);
+
+
+        assertEquals(2, taskCount, "All tasks were executed.");
+
+
     }
     @Test
     public void persistentSchedulerTest(){
-        String filePath = "Tasks.txt";
+        String filePath = "";
         File file = new File(filePath);
-        if(file.exists()){
-            assertEquals("The file exists.", filePath);
+        assertEquals("Tasks.txt", file, "The file exists.");
 
-        } else{
-            System.out.println("File does not exist");
-        }
         file.delete();
     }
 }
