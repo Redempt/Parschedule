@@ -11,6 +11,7 @@ import java.util.Date;
 import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.concurrent.atmoic.AtomicInteger;
 
 public class AppTest {
     private int taskCount;
@@ -34,24 +35,29 @@ public class AppTest {
         assertEquals(TimeOffsetParser.parseTimeOffset("3:00pm").getSeconds(), diff(Calendar.getInstance(), threePM).getSeconds());
     }
 
-    @Test
-    public void scheduleTaskTest(){
+     @Test
+    public void scheduleTaskTest() throws InterruptedException{
         PersistentScheduler scheduler = new PersistentScheduler();
+        AtomicInteger counter = new AtomicInteger(0);
 
         Runnable firstTask = () ->{
             System.out.println("Task1: Do something.");
-            taskCount++;
+            counter.incrementAndGet();
         };
 
         Runnable secondTask = () ->{
             System.out.println("Task2: Do something else.");
-            taskCount++;
+            counter.incrementAndGet();
         };
         scheduler.scheduleTask(firstTask, 2);
         scheduler.scheduleTask(secondTask,2);
 
+        Thread.sleep(3000); //Wait for tasks to finish
 
-        assertEquals(2, taskCount, "All tasks were executed.");
+        assertEquals(2, counter.get(), "All tasks were executed.");
+
+
+    }
 
 
     }
