@@ -6,15 +6,17 @@ import java.util.List;
 
 public class PersistentScheduler {
     private List<Task> tasks = new ArrayList<>();
-    private String filePath;
 
 
-    public PersistentScheduler(String filePath) {
-        this.filePath = filePath;
+    public PersistentScheduler() {
+
     }
 
     public void scheduleTask(Runnable task, long  delaySeconds) {
 
+    }
+    public static PersistentScheduler getNumberOfTasks(int taskCount){
+        return null;
     }
 
     public void saveToFile(){
@@ -24,6 +26,7 @@ public class PersistentScheduler {
     public static PersistentScheduler loadFromFile(String filePath) {
         return null;
     }
+
 }
 
 
