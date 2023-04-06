@@ -1,31 +1,32 @@
 package parschedule;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-
 public class Task {
-    private String name;
-    private String description;
+    private Runnable run;
+    private String payload;
+    private long deliveryTime;
 
-    public Task(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public Task(Runnable run, String payload) {
+        this.run = run;
+        this.payload = payload;
     }
 
-    public String getName() {
-        return name;
+    public String getPayload() {
+        return payload;
     }
 
-    public String getDescription() {
-        return description;
+    public void run() {
+        run.run();
     }
 
-    public static Function<Task, String> serialize = task -> {
-        return null;
-    };
+    public void setDeliveryTime(long time) {
+        this.deliveryTime = time;
+    }
 
-    public static Function<String, Task> deserialize = str -> {
-        return null;
-    };
+    public long getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public String toString() {
+        return deliveryTime + " " + payload.replace("\n", "\\n");
+    }
 }

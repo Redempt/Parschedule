@@ -5,12 +5,15 @@ package parschedule;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.Calendar;
 import java.util.Date;
 import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AppTest {
@@ -35,21 +38,21 @@ public class AppTest {
     }
 
     @Test
-    public void scheduleTaskTest() throws InterruptedException{
-        PersistentScheduler scheduler = new PersistentScheduler();
+    public void scheduleTaskTest() throws InterruptedException {
+        PersistentScheduler scheduler = new PersistentScheduler(null);
         AtomicInteger counter = new AtomicInteger(0);
 
-        Runnable firstTask = () ->{
+        Runnable firstTask = () -> {
             System.out.println("Task1: Do something.");
             counter.incrementAndGet();
         };
 
-        Runnable secondTask = () ->{
+        Runnable secondTask = () -> {
             System.out.println("Task2: Do something else.");
             counter.incrementAndGet();
         };
-        scheduler.scheduleTask(firstTask, 2);
-        scheduler.scheduleTask(secondTask,2);
+        scheduler.scheduleTask(new Task(firstTask, null), 2000);
+        scheduler.scheduleTask(new Task(secondTask, null), 2000);
 
         Thread.sleep(3000); //Wait for tasks to finish
 
@@ -57,18 +60,17 @@ public class AppTest {
 
 
     }
+
     @Test
-    public void persistentSchedulerTest(){
-       PersistentScheduler scheduler = new PersistentScheduler();
-       String fileName = "Task.txt";
-       Runnable task = () -> {
-            System.out.println("Test to be deleted from scheduler.");
-       };
-       scheduler.scheduleTask(task, 2);
+    public void persistentSchedulerTest() throws IOException {
+        String fileName = "Task.txt";
+        PersistentScheduler scheduler = new PersistentScheduler(fileName);
+        Runnable task = () -> System.out.println("Test to be deleted from scheduler.");
+        scheduler.scheduleTask(new Task(task, "test"), 2000);
 
-       scheduler.saveToFile(fileName);
-       File file = new File(fileName);
-       assertTrue(file.exists(), "The file exists.");
-
+        scheduler.saveToFile();
+        File file = new File(fileName);
+        assertTrue(file.exists(), "The file exists.");
+        file.delete();
     }
 }
